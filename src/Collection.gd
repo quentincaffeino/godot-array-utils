@@ -1,8 +1,10 @@
 
 extends 'Utils.gd'
 
+const Iterator = preload('../../iterator/src/Iterator.gd')
 
-# @var  Variant
+
+# @var  Dictionary
 var _collection
 
 # @var  int
@@ -57,7 +59,7 @@ func removeByIndex(index):  # void
   var keys = self._collection.keys()
 
   if index >= 0 and index < keys.size():
-    self._collection.erase( keys[index] )
+    self._collection.erase(keys[index])
 
 
 # Checks whether the collection contains a specific key/index.
@@ -106,7 +108,7 @@ func getByIndex(index):  # Variant|null
   var keys = self._collection.keys()
 
   if index >= 0 and index < keys.size():
-    return self._collection[ keys[index] ]
+    return self._collection[keys[index]]
 
   return null
 
@@ -264,20 +266,24 @@ func size():  # int
   return self._collection.size()
 
 
-# @override _iter_init(?)
+# @override  _iter_init(?)
 func _iter_init(arg):  # bool
   return self._iterationCurrent < self.length
 
 
-# @override _iter_next(?)
+# @override  _iter_next(?)
 func _iter_next(arg):  # bool
   self._iterationCurrent += 1
   return self._iterationCurrent < self.length
 
 
-# @override _iter_get(?)
-func _iter_get(arg = null):  # int
+# @override  _iter_get(?)
+func _iter_get(arg = null):  # Variant
   return self._collection.keys()[self._iterationCurrent]
+
+
+func getValueIterator():  # Iterator
+  return Iterator.new(self, 'getByIndex')
 
 
 func _setProtected(value):  # void
